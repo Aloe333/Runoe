@@ -43,6 +43,7 @@ let gameOver = false;
 let score = 0;
 let counter = 0;
 
+
 window.onload = function() {
     board = document.getElementById("board");
     board.height = boardHeight;
@@ -90,9 +91,28 @@ function update() {
 
         if (detectCollision(player, obstacle)) {
             gameOver = true;
+
+            playerImg.src = "./img/playerDead.png"; 
+            playerImg.onload = function() {
+                context.drawImage(playerImg, player.x, player.y, player.width, player.height);
+            }
+            
+            setTimeout(function() {
+                context.fillStyle="white";
+                context.font="80px Pixelify Sans";
+                context.textAlign="center";
+                context.lineWidth=10;           
+                context.strokeText("Game Over", boardWidth/2, boardHeight/2);
+                context.fillText("Game Over", boardWidth/2, boardHeight/2);
+            }, 500)
         }
     }
 
+    //score
+    context.fillStyle="black";
+    context.font="20px Pixelify Sans";
+    score++;
+    context.fillText(score, boardWidth - 75, 20, 70);
 }
 
 function movePlayer(e) { 
@@ -162,3 +182,4 @@ function playerAnimation() {
         counter = 0;
     }
 }
+
