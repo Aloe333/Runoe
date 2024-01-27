@@ -73,6 +73,7 @@ window.onload = function() {
 function update() {
     requestAnimationFrame(update);
     if (gameOver) {
+        deathUpdate()
         return;
     }
 
@@ -90,13 +91,11 @@ function update() {
         context.drawImage(obstacle.img, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
         if (detectCollision(player, obstacle)) {
+            
             gameOver = true;
 
-            playerImg.src = "./img/playerDead.png"; 
-            playerImg.onload = function() {
-                context.drawImage(playerImg, player.x, player.y, player.width, player.height);
-            }
-            
+           setInterval(deathAnimation, 100);
+
             setTimeout(function() {
                 context.fillStyle="white";
                 context.font="80px Pixelify Sans";
@@ -104,7 +103,7 @@ function update() {
                 context.lineWidth=10;           
                 context.strokeText("Game Over", boardWidth/2, boardHeight/2);
                 context.fillText("Game Over", boardWidth/2, boardHeight/2);
-            }, 500)
+            }, 675)
         }
     }
 
@@ -112,6 +111,16 @@ function update() {
     context.fillStyle="black";
     context.font="20px Pixelify Sans";
     score++;
+    context.fillText(score, boardWidth - 75, 20, 70);
+}
+
+function deathUpdate() {
+    requestAnimationFrame(deathUpdate);
+    if (counter > 5){
+        return;
+    }
+    context.clearRect(0, 0, board.width, board.height);
+    context.drawImage(playerImg, player.x, player.y, player.width, player.height);
     context.fillText(score, boardWidth - 75, 20, 70);
 }
 
@@ -127,7 +136,7 @@ function movePlayer(e) {
 }
 
 function placeObstacle() {
-    if (gameOver) {
+    if(gameOver) {
         return;
     }
 
@@ -170,16 +179,37 @@ function detectCollision(a, b) {
 }
 
 function playerAnimation() {
-    if (gameOver) {
+    if(gameOver) {
         return;
     }
     if(counter === 0) {
         playerImg.src = "./img/player2.png"; 
         counter = 1;
     } 
-    else {
+     else {
         playerImg.src = "./img/player.png"; 
         counter = 0;
+    }
+}
+
+function deathAnimation() {
+    if (counter === 0 || counter === 1) {
+        counter = 2;
+    }
+    if (counter === 2) {
+        playerImg.src = "./img/playerDead1.png"; 
+        counter = 3;
+    }
+    else if(counter === 3) {
+        playerImg.src = "./img/playerDead2.png";
+        counter = 4;
+    }
+    else if(counter === 4) {
+        playerImg.src = "./img/playerDead3.png";
+        counter = 5;
+    }
+    else if (counter === 5) {
+        counter = 6;
     }
 }
 
