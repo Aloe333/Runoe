@@ -1,13 +1,13 @@
 //board
 let board;
-let boardWidth = 750;
-let boardHeight = 250;
+let boardWidth = 1500;
+let boardHeight = 500;
 
 //player
-let playerWidth = 72;
-let playerHeight = 96;
-let playerX = 50;
-let playerY = boardHeight - playerHeight;
+let playerWidth = 144;
+let playerHeight = 188;
+let playerX = 100;
+let playerY = boardHeight - playerHeight - 25;
 let playerImg;
 
 let player = {
@@ -20,15 +20,15 @@ let player = {
 //obstacles
 let obstacleArray = [];
 
-let obstacle1Width  = 46;
-let obstacle2Width = 96;
+let obstacle1Width  = 92;
+let obstacle2Width = 192;
 
-let obstacle1Height = 96;
-let obstacle2Height = 52;
+let obstacle1Height = 192;
+let obstacle2Height = 104;
 
-let obstacleX = 700;
-let obstacle1Y = boardHeight - obstacle1Height;
-let obstacle2Y = boardHeight - obstacle2Height
+let obstacleX = 1400;
+let obstacle1Y = boardHeight - obstacle1Height - 25;
+let obstacle2Y = boardHeight - obstacle2Height - 25;
 
 let obstacle1Img;
 let obstacle2Img;
@@ -36,9 +36,9 @@ let obstacle2Img;
 let obstacleHit;
 
 //physics
-let velocityX = -5;
+let velocityX = -9;
 let velocityY = 0;
-let gravity = .4;
+let gravity = .8;
 
 //game
 let gameOver = false;
@@ -100,7 +100,7 @@ function update() {
 
             setTimeout(function() {
                 context.fillStyle="white";
-                context.font="80px Pixelify Sans";
+                context.font="160px Pixelify Sans";
                 context.textAlign="center";
                 context.lineWidth=10;           
                 context.strokeText("Game Over", boardWidth/2, boardHeight/2);
@@ -111,15 +111,15 @@ function update() {
                 switch (obstacle.name) {
                     case "cig": 
                         context.fillStyle="black";
-                        context.font="20px Pixelify Sans";
+                        context.font="40px Pixelify Sans";
                         context.textAlign="center";
-                        context.fillText("Your last cigarette got broken. You killed yourself.", boardWidth/2, boardHeight/2 + 50);
+                        context.fillText("Your last cigarette got broken. You killed yourself.", boardWidth/2, boardHeight/2 + 100);
                         break;
                     case "zoloft": 
                         context.fillStyle="black";
-                        context.font="20px Pixelify Sans";
+                        context.font="40px Pixelify Sans";
                         context.textAlign="center";
-                        context.fillText("You've been sedated.", boardWidth/2, boardHeight/2 + 50);
+                        context.fillText("You've been sedated.", boardWidth/2, boardHeight/2 + 100);
                         break;
                 }
             }, 675)
@@ -128,9 +128,9 @@ function update() {
 
     //score
     context.fillStyle="black";
-    context.font="20px Pixelify Sans";
+    context.font="40px Pixelify Sans";
     score++;
-    context.fillText(score, boardWidth - 75, 20, 70);
+    context.fillText(score, boardWidth - 150, 40, 140);
 }
 
 function deathUpdate() {
@@ -141,7 +141,7 @@ function deathUpdate() {
     context.clearRect(0, 0, board.width, board.height);
     player.y = playerY;
     context.drawImage(playerImg, player.x, player.y, player.width, player.height);
-    context.fillText(score, boardWidth - 75, 20, 70);
+    context.fillText(score, boardWidth - 150, 40, 140);
 }
 
 function movePlayer(e) { 
@@ -151,7 +151,7 @@ function movePlayer(e) {
 
     if ((e.code == "Space" || e.code == "ArrowUp") && player.y == playerY) {
         //jump
-        velocityY = -11;
+        velocityY = -22;
     }
 }
 
@@ -219,20 +219,22 @@ function deathAnimation() {
     if (counter === 0 || counter === 1) {
         counter = 2;
     }
-    if (counter === 2) {
-        playerImg.src = "./img/playerDead1.png"; 
-        counter = 3;
-    }
-    else if(counter === 3) {
-        playerImg.src = "./img/playerDead2.png";
-        counter = 4;
-    }
-    else if(counter === 4) {
-        playerImg.src = "./img/playerDead3.png";
-        counter = 5;
-    }
-    else if (counter === 5) {
-        counter = 6;
+    switch (counter) {
+        case 2:
+            playerImg.src = "./img/playerDead1.png"; 
+            counter = 3;
+            break;
+        case 3:
+            playerImg.src = "./img/playerDead2.png";
+            counter = 4;
+            break;
+        case 4: 
+            playerImg.src = "./img/playerDead3.png";
+            counter = 5;
+            break;
+        case 5: 
+            counter = 6;
+            break;
     }
 }
 
