@@ -35,6 +35,11 @@ let obstacle2Img;
 
 let obstacleHit;
 
+let spawnTime = 1000;
+
+let chance1 = .7;
+let chance2 = .4;
+
 //physics
 let velocityX = -9;
 let velocityY = 0;
@@ -67,7 +72,7 @@ window.onload = function() {
     obstacle2Img.src = "./img/obstacle2.png";
 
     requestAnimationFrame(update);
-    setInterval(placeObstacle, 1000);
+    setInterval(placeObstacle, spawnTime);
     setInterval(playerAnimation, 125);
     document.addEventListener("keydown", movePlayer)
 }
@@ -130,6 +135,27 @@ function update() {
     context.fillStyle="black";
     context.font="40px Pixelify Sans";
     score++;
+    if ((score % 1000) === 0) {
+        if (spawnTime <= 250) {
+            return;
+        }
+        spawnTime -= 10;
+        if (velocityX <= -15) {
+            return;
+        }
+        else {
+            velocityX -= 0.2;
+        }
+    }
+    if (score > 50000) {
+        chance1 = .6;
+        chance2 = .2;
+    }
+    else if (score > 20000) {
+        chance1 = .65;
+        chance2 = .3;
+    }
+
     context.fillText(score, boardWidth - 150, 40, 140);
 }
 
@@ -171,7 +197,7 @@ function placeObstacle() {
 
     let placeObstacleChance = Math.random();
 
-    if(placeObstacleChance > .75) {
+    if(placeObstacleChance > chance1) {
         obstacle.img = obstacle2Img;
         obstacle.y = obstacle2Y;
         obstacle.width = obstacle2Width;
@@ -179,7 +205,7 @@ function placeObstacle() {
         obstacle.name = "zoloft";
         obstacleArray.push(obstacle);
     } 
-    else if(placeObstacleChance > .50) {
+    else if(placeObstacleChance > chance2) {
         obstacle.img = obstacle1Img;
         obstacle.y = obstacle1Y;
         obstacle.width = obstacle1Width;
@@ -203,6 +229,10 @@ function detectCollision(a, b) {
 
 function playerAnimation() {
     if(gameOver) {
+        return;
+    }
+    if(player.y !== playerY) {
+        playerImg.src = "./img/playerJump.png"; 
         return;
     }
     if(counter === 0) {
